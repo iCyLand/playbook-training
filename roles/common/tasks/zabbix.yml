@@ -1,0 +1,28 @@
+- yum: name={{item}} state=absent
+  with_items :
+    - zabbix20-agent
+    - zabbix20-sender
+    - zabbix20
+    - zabbix22-agent
+    - zabbix22-sender
+  when: ansible_os_family == "RedHat"
+- yum: name={{item}} state=present
+  with_items :
+    - zabbix-agent
+    - zabbix-sender
+  when: ansible_os_family == "RedHat"
+ 
+- file: path="{{item}}" state=absent
+  with_items:
+    - /etc/zabbix/zabbix_agentd.conf.d
+    - /etc/zabbix/zabbix_agentd.d/userparameter_mysql.conf
+- file: path="{{item}}" state=directory
+  with_items:
+    - /etc/zabbix/zabbix_agentd.d
+    - /etc/zabbix/scripts
+- lineinfile: dest="/etc/zabbix/zabbix_agentd.conf" regexp="^Include=/etc/zabbix/zabbix_agentd.d/" state=present line="Include=/etc/zabbix/zabbix_agentd.d/"
+- template: src="{{ item.src }}" dest="{{ item.dest }}"
+  with_items :
+    - { src: zabbix/hostname.conf.j2, dest: /etc/zabbix/zabbix_agentd.d/hostname.conf }
+    - { src: zabbix/server.conf.j2, dest: /etc/zabbix/zabbix_agentd.d/server.conf }
+- service: name="zabbix-agent" enabled=yes

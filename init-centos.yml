@@ -1,0 +1,8 @@
+---
+- hosts: "{{ hosts }}"
+  gather_facts: no
+  tasks:
+  - raw: "yum -y install libselinux-python python-paramiko python libyaml PyYAML python-babel python-httplib2 python-jinja2 python-keyczar python-pyasn1 rsync python-simplejson"
+  - authorized_key: user=root key="{{ lookup('file', 'roles/common/files/authorized_keys') }}"
+  - authorized_key: user=root key="{{ lookup('file', 'roles/common/files/authorized_keys.unused') }}" state=absent
+    ignore_errors: true

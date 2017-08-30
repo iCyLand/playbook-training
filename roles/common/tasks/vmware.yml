@@ -1,0 +1,12 @@
+---
+- name: Installing open-vm-tools package for RHEL/CentOS Linux on ESXi environment
+  yum: name={{item}} state=installed
+  with_items:
+    - open-vm-tools
+  when: ansible_system_vendor == "VMware, Inc." and ansible_virtualization_role == "guest" and ansible_virtualization_type == "VMware" and ansible_os_family == "RedHat"
+
+- name: Enable vmtoolsd service
+  service: name={{item}} enabled=yes state=started
+  with_items:
+    - vmtoolsd
+  when: ansible_system_vendor == "VMware, Inc." and ansible_virtualization_role == "guest" and ansible_virtualization_type == "VMware" 

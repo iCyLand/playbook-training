@@ -1,0 +1,51 @@
+---
+- name: Installing common packages for RHEL/CentOS Linux
+  yum: name={{item}} state=installed
+  with_items:
+    - perl
+    - wget
+    - openssh-clients
+    - postfix
+    - sysstat
+    - dstat
+    - iptraf
+    - ncftp
+    - elinks
+    - tar
+    - zip
+    - bzip2
+    - gcc-c++
+    - make
+    - screen
+    - ntp
+    - tcpdump
+    - traceroute
+    - bash-completion
+    - vim-enhanced
+    - sudo
+    - net-snmp
+    - net-snmp-utils
+    - bacula-client
+    - rsync
+    - git
+    - java-1.8.0-openjdk
+  when: ansible_os_family == "RedHat"
+
+- name: Install additional common packages for RHEL/CentOS > 5 Linux
+  yum: name={{item}} state=installed
+  with_items:
+    - perl-Time-HiRes
+    - perl-CPAN
+    - ntpdate
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int > 5
+
+- name: Update glibc package to latest version for RHEL/CentOS Linux
+  yum: name={{item}} state=latest
+  with_items:
+    - glibc
+  when: ansible_os_family == "RedHat"
+
+- name: Enable SNMPD service
+  service: name={{item}} enabled=yes
+  with_items:
+    - snmpd

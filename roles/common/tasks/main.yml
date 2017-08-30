@@ -1,0 +1,9 @@
+---
+- include: repos.yml
+- include: selinux.yml
+- include: packages.yml
+- include: profile.yml
+- include: sysctl.yml
+- include: ssh.yml
+#- include: zabbix.yml
+- include: vmware.yml

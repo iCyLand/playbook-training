@@ -1,0 +1,26 @@
+---
+- name: Install EPEL repository to RHEL/CentOS Linux
+  yum: name=epel-release state=present
+  when: ansible_os_family == "RedHat"
+  tags:
+  - packages
+  - repo
+
+- name: Install Remi's RPM repository to RHEL/CentOS 7 Linux
+  yum: name="http://rpms.famillecollet.com/enterprise/remi-release-7.rpm" state=present
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 7
+  tags:
+  - packages
+  - repo
+
+- name: Install Remi's RPM repository to RHEL/CentOS 6 Linux
+  yum: name="http://rpms.famillecollet.com/enterprise/remi-release-6.rpm" state=present
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
+  tags:
+  - packages
+  - repo
+
+- name: Enable Remi's RPM repository to RHEL/CentOS Linux
+  ini_file: dest="/etc/yum.repos.d/remi.repo" section="remi" option="enabled" value="1"
+  when: ansible_os_family == "RedHat"
+

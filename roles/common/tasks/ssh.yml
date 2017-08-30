@@ -1,0 +1,15 @@
+---
+- name: Deploy authorized keys to root profile
+  authorized_key: user=root key="{{ lookup('file', 'authorized_keys') }}"
+  tags:
+  - ssh
+
+- name: Disable unused authorized keys from root profile
+  authorized_key: user=root key="{{ lookup('file', 'authorized_keys.unused') }}" state=absent
+  ignore_errors: true
+  tags:
+  - ssh
+
+- name: Enable public key authentication to SSHD server
+  lineinfile: dest="/etc/ssh/sshd_config" line="PubkeyAuthentication yes" regexp="^.?PubkeyAuthentication " insertafter="RSAAuthentication "
+  notify: restart sshd

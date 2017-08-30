@@ -1,0 +1,7 @@
+---
+- name: Disable Security-Enhanced Linux (SELinux) for RHEL/CentOS Linux
+  selinux: state=disabled
+  when: ansible_os_family == "RedHat"
+  ignore_errors: True
+  tags:
+  - selinux
