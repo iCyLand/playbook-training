@@ -1,0 +1,6 @@
+---
+- hosts: "{{ hosts }}"
+  become: false
+  remote_user: root
+  roles:
+    - common
